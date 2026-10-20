@@ -1,4 +1,3 @@
-
 # Cloud-Native Event-Driven Media Processing Pipeline
 
 A highly scalable, decoupled distributed system architecture engineered in Python to handle high-volume asynchronous media ingestion, cloud object manipulation, and background computing workflows. 
@@ -7,34 +6,14 @@ This project isolates slow processing bottlenecks from the core application laye
 
 ---
 
-## 🏗️ Architectural Topology
+## 🏗️ Architectural Data Flow
 
-[ Concurrent Client Uploads ]
-│
-▼
-┌──────────────────┐
-│   FastAPI App    │ ───► [ In-Memory Task Validation via Redis ]
-└─────────┬────────┘
-│
-▼
-┌──────────────────┐
-│    Amazon S3     │ (Scalable Cloud Object Storage Container)
-└─────────┬────────┘
-│
-▼
-┌──────────────────┐
-│   Amazon SQS     │ (Distributed Enterprise Message Broker)
-└─────────┬────────┘
-│
-▼
-┌──────────────────┐
-│  Celery Workers  │ (Asynchronous Compute Processing Grid)
-└─────────┬────────┘
-│
-▼
-┌──────────────────┐
-│ PostgreSQL / RDS │ (Indexed Relational Persistence Ledger)
-└──────────────────┘
+1. **Ingestion Gate:** Client uploads file streams through an asynchronous **FastAPI event loop** gateway.
+2. **State Cache Validation:** Request parameters are parsed against an in-memory **Redis** cache engine (`<2ms` lookup).
+3. **Decoupled Cloud Storage:** Validated binary payloads are piped programmatically into safe **Amazon S3 Object Containers**.
+4. **Distributed Pipeline Queue:** S3 ingestion events automatically trigger message handshakes inside an **Amazon SQS Broker**.
+5. **Asynchronous Compute Grid:** Independent **Celery Workers** pull events from the queue to run media compression algorithms background-offline.
+6. **Relational Transaction Ledger:** Metadata lifecycle logs and transaction records are securely committed to an indexed, ACID-compliant **PostgreSQL Database**.
 
 ---
 
